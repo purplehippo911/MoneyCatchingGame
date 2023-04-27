@@ -14,7 +14,7 @@ class Player(object):
     def __init__(self, width, height, window_width, window_height):
         self.width = width
         self.height = height
-        self.vel = 6
+        self.vel = 8
         self.x = window_width / 2 - width * 3
         self.y = window_height / 2 + height * 3 - self.vel * 3
         self.hitbox = (self.x + 11, self.y + 11, self.width, self.height)

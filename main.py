@@ -1,11 +1,15 @@
 import pygame
 # importing audio module
 from pygame import mixer
+
 # importing sprites
 from src.sprites.player import Player
 from src.sprites.coin import Coin
+
 # importing screens, both start and end screen
 from src.screens.start import draw_start_menu
+from src.screens.gameover import draw_game_over
+
 pygame.init()
 
 # attributes
@@ -23,7 +27,7 @@ window_bg = pygame.image.load('./src/assets/img/game.png')
 clock = pygame.time.Clock()
 
 # sum
-score = 0
+score = 20
 
 # text for sum
 font = pygame.font.SysFont("comicsans", 30, True)
@@ -34,7 +38,6 @@ mixer.music.load("src/assets/audio/coin_money_2.wav")
 mixer.music.set_volume(0.9)
 
 game_state = "start_menu"
-game_over = False
 
 ## redraw window function
 def redrawGameWindow():
@@ -46,19 +49,18 @@ def redrawGameWindow():
         # draw character sprite to the screen
         player.draw(win)
         # drawing coins to the screen
-        coin.draw(win, window_height)
-        coin2.draw(win, window_height)
-        coin3.draw(win, window_height)
-        coin4.draw(win, window_height)
+        for coin in coins:
+            coin.draw(win, window_height)
+
         pygame.display.flip()
 
         # Create a text surface with the font object
-        text = font.render(f"Score: {str(score)}", 1, (255, 255, 255))
+        text = font.render(f"Score: {str(round(score))}", 1, (255, 255, 255))
 
         # Blit the text surface onto the screen surface
         win.blit(text, (player.x, player.y))
     elif game_state == "game_over":
-        pass
+        draw_game_over(win, window_width, window_height)
     pygame.display.update() 
 
 # objects for coins and player
@@ -86,27 +88,38 @@ while run:
     if game_state == "start_menu":
         if keys[pygame.K_SPACE]:
             game_state = "game"
-            game_over = False
     elif game_state == "game":
         if keys[pygame.K_LEFT] and player.x > player.vel:
             player.x -= player.vel
 
         elif keys[pygame.K_RIGHT] and player.x < window_width - player.vel - player.width:
             player.x += player.vel
-        
+        elif keys[pygame.K_q]:
+            pygame.quit()
+    else:
+        if keys[pygame.K_q]:
+            pygame.quit()
+        elif keys[pygame.K_r]:
+            game_state = "game"
+            score = 0
+            for coin in coins:
+                coin.y = 0
+            redrawGameWindow()
    
 
     # checking for collision between character and coin
     for coin in coins:
         if coin.y - coin.width < player.hitbox[1] + player.hitbox[3] and coin.y + coin.width > player.hitbox[1]: # checks x coords
             if coin.x + coin.width > player.hitbox[0] and coin.x - coin.width < player.hitbox[0] + player.hitbox[2]: # Checks y coords
-                score += 1
                 coin.draw(win, window_height)
                 # playing the coin audio
+                score += 5
                 mixer.music.play()
             else:
-                if score > 10:
+                if score > 0:
                     score -= 1
+                elif score == 0:
+                    game_state = "game_over"
 
     redrawGameWindow()
 
