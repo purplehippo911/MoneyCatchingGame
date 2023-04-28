@@ -4,9 +4,9 @@ class Coin(object):
     # image
     coin_char = pygame.image.load('./src/assets/sprites/gdm-coin/Coin.gif')
 
-    def __init__(self, width, height, window_width, window_height, vel):
-        self.x = window_width
-        self.y = window_height - 100 * 2
+    def __init__(self, width, height, window_width, window_height, vel, coin_char = coin_char):
+        self.x = window_width / 2
+        self.y = window_height
         self.width = width
         self.height = height
         self.vel = vel
