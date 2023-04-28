@@ -87,7 +87,6 @@ coins = [coin, coin2, coin3, coin4]
 
 # Create the sprite group for the bombs
 bomb_group = pygame.sprite.Group()
-isBombsVisible = False
 
 # main game loop
 run = True
@@ -166,13 +165,10 @@ while run:
                         mixer.Channel(1).play(mixer.Sound('src/assets/audio/8-bit sounds/8bit-damage22.wav'))
 
     ## harder modes
-    runOnce = True
     for coin in coins:
         if score >= round(max_score / 20):
             coin.vel+=2
             player.vel+=3
-            isBombsVisible = True
-            redrawGameWindow()
         elif score >= round(max_score / 10):
             coin.vel += 5
             player.vel += 5
