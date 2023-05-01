@@ -30,7 +30,7 @@ clock = pygame.time.Clock()
 
 # sum
 score = 20
-max_score = 10000
+max_score = 1000
 
 # text for sum
 font = pygame.font.SysFont("comicsans", 35, True)
@@ -44,24 +44,32 @@ game_state = "start_menu"
 def redrawGameWindow():
     # game state
     if game_state == "start_menu":
+        pygame.mixer.music.load('src/assets/audio/Gregor Quendel - Cinematic Trailer Music/Gregor Quendel - Cinematic Trailer Music/Gregor Quendel - Cinematic Trailer Music - 01 - Cinematic Piano Trailer.wav')
+        # play audio
+        mixer.music.stop()
+        mixer.music.play(1)
         draw_start_menu(win, window_width, window_height)
+        
     elif game_state == "game":
         win.blit(window_bg, (0, 0))
+
         # draw character sprite to the screen
         player.draw(win)
         # drawing coins to the screen
         for coin in coins:
             coin.draw(win, window_height)
-
-        # Spawn a new bomb every 50 frames
-        if score < max_score / 20 and pygame.time.get_ticks() % 50 == 0:
-            new_bomb = Bomb(window_width)
-            bomb_group.add(new_bomb)
         
-        # Update the bombs
-        bomb_group.update(score, window_height)
+        if score > max_score - 350:
+            # Spawn a new bomb every 50 frames
+            if score > max_score - 350 and pygame.time.get_ticks() % 50 == 0:
+                for coin in coins:
+                    new_bomb = Bomb(window_width)
+                    bomb_group.add(new_bomb)
+            
+            # Update the bombs
+            bomb_group.update(score, window_height)
 
-        bomb_group.draw(win)
+            bomb_group.draw(win)
 
         pygame.display.flip()
 
@@ -146,32 +154,54 @@ while run:
                     mixer.music.play(-1)
 
 
-                elif score == max_score:
+                elif score >= max_score:
                     game_state = "game_won"
                     mixer.music.stop()
                     mixer.Channel(0).stop()
                     mixer.Channel(1).stop()
                     for coin in coins:
                         coin.y = 0
-                    redrawGameWindow()
+                    win.fill((50, 0, 100))
+                    mixer.music.load('src/assets/audio/Gregor Quendel - Cinematic Trailer Music/Gregor Quendel - Cinematic Trailer Music/Gregor Quendel - Cinematic Trailer Music - 18 - Cinematic Lullaby Fairy Tale Trailer.wav')
+                    mixer.music.play(-1)
    
         # checking for collision between bomb and player
         for bomb in bomb_group:
             if bomb.rect.y < player.hitbox[1] + player.hitbox[3] and bomb.rect.y > player.hitbox[1]: # checks x coords
                     if bomb.rect.x > player.hitbox[0] and bomb.rect.x < player.hitbox[0] + player.hitbox[2]: # Checks y coords
                         bomb.update(score, window_height)
-                        score-=10
-                        # playing the coin audio
-                        mixer.Channel(1).play(mixer.Sound('src/assets/audio/8-bit sounds/8bit-damage22.wav'))
+                        if score > 0 and score < max_score:
+                            score-=3
+                            # playing the coin audio
+                            mixer.Channel(1).play(mixer.Sound('src/assets/audio/8-bit sounds/8bit-damage22.wav'))
 
-    ## harder modes
-    for coin in coins:
-        if score >= round(max_score / 20):
-            coin.vel+=2
-            player.vel+=3
-        elif score >= round(max_score / 10):
-            coin.vel += 5
-            player.vel += 5
+    
+    # Define a boolean flag variable to track if the harder modes have been applied
+    harder_modes_applied = False
+
+    # harder modes
+    if score >= max_score / 2:
+        # Run the loop at least once
+        while not harder_modes_applied:
+            coin.vel = 8 + 3
+            coin2.vel = 7 + 3
+            coin3.vel = 6 + 3
+            coin4.vel = 5 + 3
+            player.vel = 10 + 4
+            harder_modes_applied = True
+    elif score >= max_score - 300:
+        while not harder_modes_applied:
+            coin.vel = 10 + 5
+            coin2.vel = 9 + 5
+            coin3.vel = 8 + 5
+            coin4.vel = 7 + 5
+            player.vel = 14 + 6
+
+            harder_modes_applied = True
+
+# exit the loop if the harder modes have been applied
+# if harder_modes_applied:
+#     break
             
 
     redrawGameWindow()
