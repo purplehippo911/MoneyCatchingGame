@@ -1,5 +1,30 @@
 import pygame
 
+
+coin_1_x = 0
+coin_1_y = 2
+
+coin_2_x = 0
+coin_2_y = 2
+
+# vanlig funksjon
+myFunction()
+
+
+# metode
+coin.draw()
+
+# object
+coin1 = Coin(100, 500, )
+coin2 = Coin(200, 400)
+coin1.x
+
+coin1.x
+
+coin2.x = True
+
+coin3.x = False
+
 class Coin(object):
     # image
     coin_char = pygame.image.load('./src/assets/sprites/gdm-coin/Coin.gif')

@@ -90,6 +90,7 @@ coin = Coin(20, 20, window_width + 500, window_height, 8)
 coin2 = Coin(20, 20, window_width - 200, window_height + 50, 7)
 coin3 = Coin(20, 20, window_width - 1000, window_height + 120, 6)
 coin4 = Coin(20, 20, window_width + 1000, window_height + 150, 5)
+
 # list cointaining all coins, so that I can iterate over items
 coins = [coin, coin2, coin3, coin4]
 

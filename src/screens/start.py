@@ -9,11 +9,10 @@ mixer.music.set_volume(0.7)
 def draw_start_menu(win, window_width, window_height):
     win.fill((0, 100, 100))
 
-    
-
     # fixing font
     title_font = pygame.font.SysFont('comicsans', 50)
     text_font = pygame.font.SysFont('comicsans', 30)
+
     description_font = pygame.font.SysFont('comicsans', 30)
     
     # rendering text

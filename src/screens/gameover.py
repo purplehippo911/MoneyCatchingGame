@@ -2,7 +2,6 @@ import pygame
 
 def draw_game_over(win, window_width, window_height):
     window_bg = pygame.image.load("src/assets/img/cyberpunk-street.png")
-    
 
     win.blit(window_bg, (0, 0))
     win.fill((0, 0, 0))
